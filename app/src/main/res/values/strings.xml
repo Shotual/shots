@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">pruebaExamen</string>
+    <string name="com.twitter.sdk.android.CONSUMER_KEY">mjww6BSMjuYOpUO0Avxwhthqt</string>
+    <string name="com.twitter.sdk.android.CONSUMER_SECRET">a8afDoNkqtTH5YTcVVbzD30p05molxYOvjLb1C7jWVECXkgOks</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_maps">Map</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
