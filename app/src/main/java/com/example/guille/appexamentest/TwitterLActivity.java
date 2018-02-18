@@ -72,14 +72,10 @@ public class TwitterLActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         DataHolder.instance.fireBaseAdmin = new FireBaseAdmin();
-
-
         // Inicializamos Twitter despues de añadir el boton propio de Twitter
         // al XML y añadir las dependencias al build gradle
         Twitter.initialize(this);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         fab1 =(Button)findViewById(R.id.btnanim);

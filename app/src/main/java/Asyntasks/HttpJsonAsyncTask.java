@@ -1,7 +1,23 @@
-package com.example.milib.asynctasks;
+package Asyntasks;
+
+/**
+ * Created by guille on 18/2/18.
+ */
 
 import android.os.AsyncTask;
 import android.util.Log;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import android.os.AsyncTask;
+import android.util.Log;
+
+import com.example.guille.appexamentest.MainActivity;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,9 +34,15 @@ public class HttpJsonAsyncTask extends AsyncTask<String,Integer,String> {
     public static final String REQUEST_METHOD = "GET";
     public static final int READ_TIMEOUT = 15000;
     public static final int CONNECTION_TIMEOUT = 15000;
+    MainActivity mainActivity;
+    HttpJsonAsyncTaskListener httpJsonAsyncTaskListener;
 
-    public HttpJsonAsyncTask(){
+    public HttpJsonAsyncTask(MainActivity mainActivity){
+        this.mainActivity=mainActivity;
+    }
 
+    public void setListener(HttpJsonAsyncTaskListener listener) {
+        this.httpJsonAsyncTaskListener = listener;
     }
 
     @Override
@@ -83,6 +105,8 @@ public class HttpJsonAsyncTask extends AsyncTask<String,Integer,String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         Log.v("httpjson","JSON DESCARGADO"+s);
+        httpJsonAsyncTaskListener.JsonOk(s);
 
     }
+
 }

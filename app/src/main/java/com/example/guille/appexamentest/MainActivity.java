@@ -13,10 +13,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.milib.asynctasks.HttpJsonAsyncTask;
+
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.GenericTypeIndicator;
+import com.google.gson.JsonParser;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import org.json.JSONArray;
@@ -27,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import Asyntasks.HttpJsonAsyncTask;
+import Asyntasks.HttpJsonAsyncTaskListener;
 import DataHolder.DataHolder;
 import FireBase.FireBaseAdmin;
 import FireBase.FireBaseAdminListener;
@@ -38,9 +41,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView name,email;
     ImageView imgPerfil;
     SupportMapFragment mapFragment;
+    String s;
+    public DataBaseHandler databaseHandler;
 
-
-
+    public void setS(String s) {
+        this.s = s;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +59,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         DataHolder.instance.fireBaseAdmin.descargarYObservarRama("Contactos");
 
 
-        HttpJsonAsyncTask httpJsonAsyncTask1=new HttpJsonAsyncTask();
+        HttpJsonAsyncTask httpJsonAsyncTask1=new HttpJsonAsyncTask(this);
+        httpJsonAsyncTask1.setListener(events);
         String url1 = String.format("http://10.0.2.2/pruebasJSON/leeJugadores.php");
         httpJsonAsyncTask1.execute(url1);
 
-        DataBaseHandler databaseHandler =  new DataBaseHandler(this);
-        databaseHandler.addContact(new Contact(1,"GUILL",5.2,2.4));
+         databaseHandler =  new DataBaseHandler(this);
+        //
         Contact contacttemp=databaseHandler.getContact(1);
 
         Log.v("id","NOMBREE ---->"+contacttemp.getName());
@@ -70,8 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Writing Contacts to log
             Log.v("TUTORIALSQLLITE ", log);
         }
-
-
+        Log.v("PRUEBA1","PRUUUEBA"+s);
 
 
 
@@ -85,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 }
 
-class MainActivityEvents implements FireBaseAdminListener{
+class MainActivityEvents implements FireBaseAdminListener, HttpJsonAsyncTaskListener{
     MainActivity mainActivity;
 
     public MainActivityEvents(MainActivity mainActivity){
@@ -124,6 +130,22 @@ class MainActivityEvents implements FireBaseAdminListener{
     }
 
 
+    @Override
+    public void JsonOk(String x) {
+        Log.v("PRUEBA2",""+x);
+        try {
 
+            JSONObject object = new JSONObject(x); //Creamos un objeto JSON a partir de la cadena
 
+            JSONArray json_array = object.optJSONArray("Contactos");
+            for (int i = 0; i < json_array.length(); i++) {
+               this.mainActivity.databaseHandler.addContact(new Contact(json_array.getJSONObject(i).getString("nombre"),5.2,2.4));
+                Log.v("PRUEBA1","ENTRA EN EL FOR"+json_array.getJSONObject(i).getString("nombre"));
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }
