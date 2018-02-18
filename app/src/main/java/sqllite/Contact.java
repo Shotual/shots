@@ -1,5 +1,7 @@
 package sqllite;
 
+import org.json.JSONObject;
+
 /**
  * Created by guille on 17/2/18.
  */
@@ -11,7 +13,6 @@ public class Contact {
     //private variables
     int _id;
     String _name;
-    String _phone_number;
     double lat,lon;
    // Marker perfilMarker;
 
@@ -19,20 +20,17 @@ public class Contact {
     public Contact(){
 
     }
-    // constructor
-    public Contact(int id, String name, String _phone_number){
+    public Contact(int id, String name,double lat,double lon){
         this._id = id;
         this._name = name;
-        this._phone_number = _phone_number;
         this.lat=lat;
         this.lon=lon;
     }
 
 
     // constructor
-    public Contact(String name, String _phone_number,double lat,double lon){
+    public Contact(String name,double lat,double lon){
         this._name = name;
-        this._phone_number = _phone_number;
         this.lat=lat;
         this.lon=lon;
 
@@ -66,15 +64,6 @@ public class Contact {
         this._name = name;
     }
 
-    // getting phone number
-    public String getPhoneNumber(){
-        return this._phone_number;
-    }
-
-    // setting phone number
-    public void setPhoneNumber(String phone_number){
-        this._phone_number = phone_number;
-    }
 
     public double getLon() {
         return lon;

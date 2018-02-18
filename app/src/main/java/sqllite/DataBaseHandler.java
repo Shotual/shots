@@ -19,6 +19,7 @@ import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ import java.util.List;
 public class DataBaseHandler extends SQLiteOpenHelper {
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 7;
 
     // Database Name
     private static final String DATABASE_NAME = "contactsManager";
@@ -38,12 +39,14 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     // Contacts Table Columns names
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
-    private static final String KEY_PH_NO = "phone_number";
     private static final String KEY_LAT = "lat";
     private static final String KEY_LON = "lon";
 
     public DataBaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        Log.v("YONYBBDD","SUPER---->>");
+        getWritableDatabase();
+
     }
 
     // Creating Tables
@@ -51,8 +54,10 @@ public class DataBaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_CONTACTS + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
-                + KEY_PH_NO + " TEXT" + KEY_LAT + "DOUBLE"+ KEY_LON+"DOUBLE"+")";
+                +KEY_LAT + " DOUBLE,"+ KEY_LON + " DOUBLE"+")";
+        Log.v("YONYBBDD","DATABASE---->>"+CREATE_CONTACTS_TABLE);
         db.execSQL(CREATE_CONTACTS_TABLE);
+
     }
 
     // Upgrading database
@@ -71,9 +76,8 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_ID, contact.getID());
         values.put(KEY_NAME, contact.getName()); // Contact Name
-        values.put(KEY_PH_NO, contact.getPhoneNumber());
-        values.put(String.valueOf(KEY_LAT), contact.getLat());
-        values.put(String.valueOf(KEY_LON), contact.getLon());// Contact Phone Number
+        values.put(KEY_LAT, contact.getLat());
+        values.put(KEY_LON, contact.getLon());// Contact Phone Number
 
         // Inserting Row
         db.insert(TABLE_CONTACTS, null, values);
@@ -86,13 +90,13 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_CONTACTS, new String[] { KEY_ID,
-                        KEY_NAME, KEY_PH_NO }, KEY_ID + "=?",
+                        KEY_NAME, KEY_LAT, KEY_LON}, KEY_ID + "=?",
                 new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
         Contact contact = new Contact(Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1), cursor.getString(2));
+                cursor.getString(1), cursor.getDouble(2), cursor.getDouble(3));
         // return contact
         return contact;
     }
@@ -113,7 +117,9 @@ public class DataBaseHandler extends SQLiteOpenHelper {
                 Contact contact = new Contact();
                 contact.setID(Integer.parseInt(cursor.getString(0)));
                 contact.setName(cursor.getString(1));
-                contact.setPhoneNumber(cursor.getString(2));
+                contact.setLat(cursor.getInt(2));
+                contact.setLon(cursor.getInt(3));
+
                 // Adding contact to list
                 contactList.add(contact);
             } while (cursor.moveToNext());

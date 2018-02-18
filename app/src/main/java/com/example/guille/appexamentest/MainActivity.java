@@ -19,7 +19,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.GenericTypeIndicator;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import DataHolder.DataHolder;
@@ -45,19 +50,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MainActivityEvents events = new MainActivityEvents(this);
 
         DataHolder.instance.fireBaseAdmin.setListener(events);
-
-
-
         DataHolder.instance.fireBaseAdmin.descargarYObservarRama("Contactos");
-
-
-        DataBaseHandler databaseHandler =  new DataBaseHandler(this);
-        Contact contact= new Contact("GUILLE","918578491",5.2,2.4);
 
 
         HttpJsonAsyncTask httpJsonAsyncTask1=new HttpJsonAsyncTask();
         String url1 = String.format("http://10.0.2.2/pruebasJSON/leeJugadores.php");
         httpJsonAsyncTask1.execute(url1);
+
+        DataBaseHandler databaseHandler =  new DataBaseHandler(this);
+        databaseHandler.addContact(new Contact(1,"GUILL",5.2,2.4));
+        Contact contacttemp=databaseHandler.getContact(1);
+
+        Log.v("id","NOMBREE ---->"+contacttemp.getName());
+
+      List<Contact> contacts = databaseHandler.getAllContacts();
+        Log.v("TUTORIALSQLLITE","CONCTACTOS---------->>"+contacts.size());
+        for (Contact cn : contacts) {
+            String log = "Id: "+cn.getID()+" ,Name: " + cn.getName() + " ,LAT: " + cn.getLat() + " ,LONG: " + cn.getLon();
+            // Writing Contacts to log
+            Log.v("TUTORIALSQLLITE ", log);
+        }
+
+
+
+
 
     }
 

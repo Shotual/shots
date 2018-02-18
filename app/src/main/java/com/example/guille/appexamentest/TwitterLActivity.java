@@ -5,6 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -52,12 +56,14 @@ import DataHolder.DataHolder;
 import FireBase.FireBaseAdmin;
 
 
+
 public class TwitterLActivity extends AppCompatActivity {
 
 
 
     private TwitterLoginButton twitterLoginButton;
-
+    Animation show_fab1;
+    Button fab1;
 
     //JSON utilizado para almacenar los datos del usuario para posteriormente
     // poder pasarselos al DataHolder para usarlos en otra Activity
@@ -76,6 +82,10 @@ public class TwitterLActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        fab1 =(Button)findViewById(R.id.btnanim);
+        show_fab1= AnimationUtils.loadAnimation(this,R.anim.fab1_show);
+
+
 
 
         //Boton de Twitter.
@@ -101,6 +111,14 @@ public class TwitterLActivity extends AppCompatActivity {
                 FirebaseCrash.report(new Exception("USER FAIL AT LOG IN"));
             }
         });
+
+
+
+    }
+
+    public void buttonClicked(View v){
+        fab1.startAnimation(show_fab1);
+
     }
 
 

@@ -83,5 +83,6 @@ public class HttpJsonAsyncTask extends AsyncTask<String,Integer,String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         Log.v("httpjson","JSON DESCARGADO"+s);
+
     }
 }
