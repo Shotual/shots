@@ -36,6 +36,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static android.content.ContentValues.TAG;
 
 /**
@@ -92,6 +95,12 @@ public class FireBaseAdmin {
                 listener.firebaseAdmin_ramaDescargada(rama,null);
             }
         });
+    }
+
+    public void insertarenrama (String rutaRama, Map<String,Object> valores){
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put(rutaRama ,valores);
+        myRefRaiz.updateChildren(childUpdates);
     }
     }
 

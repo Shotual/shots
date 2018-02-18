@@ -1,6 +1,11 @@
 package sqllite;
 
+import com.google.firebase.database.Exclude;
+
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by guille on 17/2/18.
@@ -34,6 +39,17 @@ public class Contact {
         this.lat=lat;
         this.lon=lon;
 
+    }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("Nombre", _name);
+        result.put("lat", lat);
+        result.put("lon", lon);
+
+
+        return result;
     }
 
 
