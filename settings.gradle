@@ -1,1 +1,2 @@
-include ':app', ':milib', ':appexamen'
+//include ':app', ':milib', ':appexamen'
+include ':milib', ':appexamen'
