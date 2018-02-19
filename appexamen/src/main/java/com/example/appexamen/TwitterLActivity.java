@@ -1,28 +1,8 @@
 package com.example.appexamen;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.TwitterAuthProvider;
-import com.google.firebase.crash.FirebaseCrash;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import DataHolder.DataHolder;
-import FireBase.FireBaseAdmin;
+/**
+ * Created by juan.jusue on 19/02/2018.
+ */
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -51,34 +31,8 @@ import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.TwitterAuthProvider;
-import com.google.firebase.crash.FirebaseCrash;
-import com.twitter.sdk.android.core.Callback;
-import com.twitter.sdk.android.core.Result;
-import com.twitter.sdk.android.core.Twitter;
-import com.twitter.sdk.android.core.TwitterException;
-import com.twitter.sdk.android.core.TwitterSession;
-import com.twitter.sdk.android.core.identity.TwitterLoginButton;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import DataHolder.DataHolder;
 import FireBase.FireBaseAdmin;
-
 
 
 public class TwitterLActivity extends AppCompatActivity {
@@ -96,15 +50,19 @@ public class TwitterLActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         DataHolder.instance.fireBaseAdmin = new FireBaseAdmin();
+
         // Inicializamos Twitter despues de añadir el boton propio de Twitter
         // al XML y añadir las dependencias al build gradle
         Twitter.initialize(this);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         fab1 =(Button)findViewById(R.id.btnanim);
         show_fab1= AnimationUtils.loadAnimation(this,R.anim.fab1_show);
-
 
 
 
@@ -118,6 +76,7 @@ public class TwitterLActivity extends AppCompatActivity {
                     datosTwitter.put("UserName", result.data.getUserName().toString());
                     datosTwitter.put("id", String.valueOf(result.data.getUserId()));
                 } catch (JSONException e) {
+                    //CRASH REPORT EXAMEN
                     FirebaseCrash.report(new Exception("CREATE JSON WITH USER DATA FAIL"));
                     e.printStackTrace();
                 }
@@ -131,14 +90,6 @@ public class TwitterLActivity extends AppCompatActivity {
                 FirebaseCrash.report(new Exception("USER FAIL AT LOG IN"));
             }
         });
-
-
-
-    }
-
-    public void buttonClicked(View v){
-        fab1.startAnimation(show_fab1);
-
     }
 
 
@@ -185,7 +136,12 @@ public class TwitterLActivity extends AppCompatActivity {
         finish();
     }
 
+    /////________Animacion del boton_______\\\\\
+    public void buttonClicked(View v){
+        fab1.startAnimation(show_fab1);
 
+    }
+    /////___________________________________\\\\\
 
 
 

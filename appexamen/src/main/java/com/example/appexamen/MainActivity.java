@@ -1,62 +1,20 @@
-package com.example.appexamen;
-
-import android.content.Intent;
-import android.os.Bundle;
+package com.example.appexamen;import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.GenericTypeIndicator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import AsyncTasks.HttpJsonAsyncTask;
 import AsyncTasks.HttpJsonAsyncTaskListener;
-import DataHolder.DataHolder;
-import FireBase.FireBaseAdmin;
-import FireBase.FireBaseAdminListener;
-import sqllite.Contact;
-import sqllite.DataBaseHandler;
-
-import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
-import android.widget.TextView;
-import com.google.firebase.crash.FirebaseCrash;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.gson.JsonParser;
-import com.twitter.sdk.android.core.IntentUtils;
-import com.twitter.sdk.android.core.identity.TwitterLoginButton;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-
 import DataHolder.DataHolder;
 import FireBase.FireBaseAdmin;
 import FireBase.FireBaseAdminListener;
@@ -64,54 +22,29 @@ import GPSAdmin.GPSTracker;
 import sqllite.Contact;
 import sqllite.DataBaseHandler;
 
-
-
 public class MainActivity extends AppCompatActivity {
-    Map<String,Contact> contactos;
-    TextView name,email;
-    ImageView imgPerfil;
-    SupportMapFragment mapFragment;
-    String s;
     public DataBaseHandler databaseHandler;
 
-    public void setS(String s) {
-        this.s = s;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         DataHolder.instance.fireBaseAdmin= new FireBaseAdmin();
         MainActivityEvents events = new MainActivityEvents(this);
-
         DataHolder.instance.fireBaseAdmin.setListener(events);
-        DataHolder.instance.fireBaseAdmin.descargarYObservarRama("Contactos");
+        databaseHandler =  new DataBaseHandler(this);
 
 
-
-
-
+        ////_________DESCARGAR JSON DESDE PHP-MYSQL___________\\\\\\\\\\\
         HttpJsonAsyncTask httpJsonAsyncTask1=new HttpJsonAsyncTask(this);
         httpJsonAsyncTask1.setListener(events);
         String url1 = String.format("http://10.0.2.2/pruebasJSON/leeJugadores.php");
         httpJsonAsyncTask1.execute(url1);
+        ////____________________________________________________\\\\\\\\\\
 
-        databaseHandler =  new DataBaseHandler(this);
-        //
-        Contact contacttemp=databaseHandler.getContact(1);
-
-        Log.v("id","NOMBREE ---->"+contacttemp.getName());
-
-        List<Contact> contacts = databaseHandler.getAllContacts();
-        Log.v("TUTORIALSQLLITE","CONCTACTOS---------->>"+contacts.size());
-        for (Contact cn : contacts) {
-            String log = "Id: "+cn.getID()+" ,Name: " + cn.getName() + " ,LAT: " + cn.getLat() + " ,LONG: " + cn.getLon();
-            // Writing Contacts to log
-            Log.v("TUTORIALSQLLITE ", log);
-        }
-        Log.v("PRUEBA1","PRUUUEBA"+s);
-
+        ///_________GPS TRACKER SUBE CON TU NOMBRE DE TWITTER TU POSICION ACTUAL A FIREBASE___________\\\
         GPSTracker gpsTracker=new GPSTracker(this);
         if(gpsTracker.canGetLocation()){
             Log.v("SecondActivity",gpsTracker.getLatitude()+"  "+gpsTracker.getLongitude());
@@ -129,25 +62,24 @@ public class MainActivity extends AppCompatActivity {
         else{
             gpsTracker.showSettingsAlert();
         }
+        ///______________________________________________________________________________________________\\\
 
 
     }
-
-    public void irNav(View v){
+    //____METODO PARA IR AL NAVDRAWER____\\
+    public void iranav(View v){
         Intent intent = new Intent(getBaseContext(),Main2Activity.class);
         startActivity(intent);
         finish();
-
     }
-
+    //___________________________________\\
 
 }
-
-class MainActivityEvents implements FireBaseAdminListener, HttpJsonAsyncTaskListener {
+class MainActivityEvents implements HttpJsonAsyncTaskListener, FireBaseAdminListener {
     MainActivity mainActivity;
 
-    public MainActivityEvents(MainActivity mainActivity){
-        this.mainActivity=mainActivity;
+    public MainActivityEvents(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
     }
 
     @Override
@@ -163,52 +95,38 @@ class MainActivityEvents implements FireBaseAdminListener, HttpJsonAsyncTaskList
     @Override
     public void firebaseAdmin_ramaDescargada(String rama, DataSnapshot dataSnapshot) {
 
-        Log.v("RAMA",rama+"--------RAMA DESCARGADA............"+dataSnapshot);
-
-        if(rama.equals("Noticias")){
-
-            GenericTypeIndicator<ArrayList<Contact>> indicator=new GenericTypeIndicator<ArrayList<Contact>>(){};
-            ArrayList<Contact> noticias=dataSnapshot.getValue(indicator);
-            //VALUES NO ES UN ARRAY LIST ES UN COLLECTIONS
-            Log.v("noticias","noticias CONTIENE: "+noticias);
-
-            //PARA TRANSFORMAR UN COLLECTION A UN ARRAY LIST HAY QUE HACER es new ArrayList<Mensaje>(msg.values())
-
-        }
-        else{
-            Log.v("noticias","ERROR");
-        }
-
     }
 
-
+    ///_____________AQUI SE GUARDAN LOS CONTACTOS DEL MYSQL CON EL JSON AL SQLITE______________\\\
     @Override
     public void JsonOk(String x) {
         Log.v("PRUEBA2",""+x);
-
-
         try {
 
             JSONObject object = new JSONObject(x); //Creamos un objeto JSON a partir de la cadena
 
             JSONArray json_array = object.optJSONArray("Contactos");
             for (int i = 0; i < json_array.length(); i++) {
-                this.mainActivity.databaseHandler.addContact(new Contact(Integer.parseInt(json_array.getJSONObject(i).getString("id")),json_array.getJSONObject(i).getString("nombre"),Double.parseDouble(json_array.getJSONObject(i).getString("lat")),Double.parseDouble(json_array.getJSONObject(i).getString("lon"))));
                 Log.v("PRUEBA1","ENTRA EN EL FOR"+json_array.getJSONObject(i).getString("nombre"));
+                this.mainActivity.databaseHandler.addContact(new Contact(Integer.parseInt(json_array.getJSONObject(i).getString("id")),json_array.getJSONObject(i).getString("nombre"),Double.parseDouble(json_array.getJSONObject(i).getString("lat")),Double.parseDouble(json_array.getJSONObject(i).getString("lon"))));
 
-            }
-            List<Contact> contacts = this.mainActivity.databaseHandler.getAllContacts();
-            Log.v("TUTORIALSQLLITE2","CONCTACTOS---------->>"+contacts.size());
-            for (Contact cn : contacts) {
-                String log = "Id: "+cn.getID()+" ,Name: " + cn.getName() + " ,LAT: " + cn.getLat() + " ,LONG: " + cn.getLon();
-                // Writing Contacts to log
-                Log.v("TUTORIALSQLLITE2 ", log);
             }
 
         } catch (JSONException e) {
+            e.printStackTrace();
             FirebaseCrash.report(new Exception("Error JSON"));
         }
+
+
+        //__________SQL LITE PARA COMPROBAR QUE SE HAN SUBIDO CORRECTAMENTE___________\\
+        DataBaseHandler databaseHandler =  new DataBaseHandler(mainActivity);
+        List<Contact> contacts = databaseHandler.getAllContacts();
+        for (Contact cn : contacts) {
+            String log = "Id: "+cn.getID()+" ,Name: " + cn.getName() + " ,LAT: " + cn.getLat() + " ,LONG: " + cn.getLon();
+            // Writing Contacts to log
+            Log.v("TUTORIALSQLLITE ", log);
+        }
+        //______________________________________________________________________________\\
     }
-
-
+    ///___________________________________________________________________________________________\\\
 }
