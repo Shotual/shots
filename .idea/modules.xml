@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AppExamenTest.iml" filepath="$PROJECT_DIR$/AppExamenTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/milib/milib.iml" filepath="$PROJECT_DIR$/milib/milib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/appexamen/appexamen.iml" filepath="$PROJECT_DIR$/appexamen/appexamen.iml" />
       <module fileurl="file://$PROJECT_DIR$/milib/milib.iml" filepath="$PROJECT_DIR$/milib/milib.iml" />
     </modules>
   </component>

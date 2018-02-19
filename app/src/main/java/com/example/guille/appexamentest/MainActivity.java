@@ -1,5 +1,6 @@
 package com.example.guille.appexamentest;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -42,7 +43,7 @@ import GPSAdmin.GPSTracker;
 import sqllite.Contact;
 import sqllite.DataBaseHandler;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity{
     Map<String,Contact> contactos;
     TextView name,email;
     ImageView imgPerfil;
@@ -109,9 +110,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
+    public void irNav(View v){
+        Intent intent = new Intent(getBaseContext(),Main2Activity.class);
+        startActivity(intent);
+        finish();
+
     }
 
 

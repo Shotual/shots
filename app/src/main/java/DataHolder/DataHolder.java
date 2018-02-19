@@ -10,8 +10,6 @@ import FireBase.FireBaseAdmin;
  */
 
 public class DataHolder {
-
-
     public static  DataHolder instance = new DataHolder();
     public static JSONObject jsonObjectTwitter;
     public FireBaseAdmin fireBaseAdmin;
