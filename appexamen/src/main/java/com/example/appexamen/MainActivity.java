@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 FirebaseCrash.report(new Exception("Error Contacto"));
             }
-            DataHolder.instance.fireBaseAdmin.insertarenrama("/Contacts/0",contact.toMap());
+            DataHolder.instance.fireBaseAdmin.insertarenrama("/Contacts/1",contact.toMap());
         }
         else{
             gpsTracker.showSettingsAlert();
